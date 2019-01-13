@@ -66,6 +66,10 @@ export default class HomeScreen extends React.Component {
 
     let data = await response.json();
 
+    if ((data.length + this.state.data.length)%20 !== this.state.ads.length) {
+      this.getNewAd();
+    }
+
     this.setState({
       data: [...this.state.data, ...data],
       isLoading: false,

@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+	ActivityIndicator,
   View,
 	Text,
 	ScrollView,
@@ -49,31 +50,31 @@ export default class Grid extends React.Component {
 		if (data.length) {
 			return data.map((item, index) => {
 				return (
-					<View style={{ flex: 1, alignSelf: 'stretch', flexDirection: 'column' }} key={item.id}>
+					<View style={[{ flex: 1, alignSelf: 'stretch', flexDirection: 'column' }]} key={item.id}>
 						{ index > 19 && index%20 === 0 ? (
-							<View style={{ flex: 1, alignSelf: 'stretch', flexDirection: 'row' }}>
-								<Image source={{uri: ads[index/20] ? ads[index/20] : getNewAd()}} style={{height: 200, width:  320}} />
+							<View style={[{flex: 1}, styles.gridRow]}>
+								<Image source={{uri: ads[index/20]}} style={{height: 200, width:  320}} />
 							</View>
 						) : null}
-						<View style={{ flex: 1, alignSelf: 'stretch', flexDirection: 'row' }}>
-							<View style={{ flex: 3, ...styles.cell }}>
+						<View style={[{flex: 1}, styles.gridRow]}>
+							<View style={[{ flex: 3 }, styles.cell]}>
 								<ScrollView horizontal={true}>
 									<Text style={{fontSize: item.size}}>
 										{item.face}
 									</Text>
 								</ScrollView>
 							</View>
-							<View style={{ flex: 1, ...styles.cell }}>
+							<View style={[{ flex: 1 }, styles.cell]}>
 								<Text>
 									{item.size}
 								</Text>
 							</View>
-							<View style={{ flex: 2, ...styles.cell }}>
+							<View style={[{ flex: 2 }, styles.cell]}>
 								<Text>
 									{formatDate(item.date)}
 								</Text>
 							</View>
-							<View style={{ flex: 1, ...styles.cell }}>
+							<View style={[{ flex: 1 }, styles.cell]}>
 								<Text>
 									{item.price}
 								</Text>
@@ -128,7 +129,8 @@ export default class Grid extends React.Component {
 
   render() {
 		const {
-			isLoading
+			isLoading,
+			isEndOfCatalog
 		} = this.props;
 
     return (
@@ -141,12 +143,12 @@ export default class Grid extends React.Component {
 				<View style={styles.gridContainer}>
 					{/* <GridHeader> */}
 					<View style={styles.gridRow}> 
-							<View style={{ flex: 3, ...styles.cell }}>
+							<View style={[{ flex: 3 }, styles.cell]}>
 								<Text>
 									Face
 								</Text>
 							</View>
-							<View style={{ flex: 1, ...styles.cell }}>
+							<View style={[{ flex: 1 }, styles.cell]}>
 								<TouchableOpacity onPress={() => this.handleSort('size')}>
 									<Text>
 										Size
@@ -154,7 +156,7 @@ export default class Grid extends React.Component {
 									</Text>
 								</TouchableOpacity>
 							</View>
-							<View style={{ flex: 2, ...styles.cell }}>
+							<View style={[{ flex: 2 }, styles.cell]}>
 								<TouchableOpacity onPress={() => this.handleSort('date')}>
 									<Text>
 										Date
@@ -162,7 +164,7 @@ export default class Grid extends React.Component {
 									</Text>
 								</TouchableOpacity>
 							</View>
-							<View style={{ flex: 1, ...styles.cell }}>
+							<View style={[{ flex: 1 }, styles.cell]}>
 								<TouchableOpacity onPress={() => this.handleSort('price')}>
 									<Text>
 										Price
@@ -176,9 +178,7 @@ export default class Grid extends React.Component {
 					{ this.renderBody() }
 					{ isLoading ? (
 						<View>
-							<Text>
-								Loading...
-							</Text>
+							<ActivityIndicator size={'large'} />
 						</View>
 					) : null }
 
